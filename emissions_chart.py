@@ -88,7 +88,9 @@ LOGO_CANDIDATES = [
     "regen-logo.jpeg",
     "regen_logo.svg",
 ]
-OUTPUT_FILENAME = "emissions-1gw-datacentre.html"
+# Named index.html so that GitHub Pages serves it at the bare repo URL
+# (https://<user>.github.io/<repo>/) rather than only at a full filename.
+OUTPUT_FILENAME = "index.html"
 
 # ---------------------------------------------------------------------------
 # 2. Regen brand colours (exact hex, as supplied)
@@ -116,6 +118,22 @@ BORDER_HAIRLINE = "rgba(19, 68, 72, 0.16)"
 
 FONT_STACK = 'Aptos, "Aptos Display", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif'
 
+# ---------------------------------------------------------------------------
+# 2b. Font sizes — edit these numbers to resize chart text
+# ---------------------------------------------------------------------------
+
+# The cluster labels under each group: "Low load factor (45%)" / "High load
+# factor (95%)". The mobile value kicks in below 520px, where the desktop
+# size is too wide to fit and Plotly would rotate the labels vertically.
+CATEGORY_LABEL_SIZE = 20
+CATEGORY_LABEL_SIZE_MOBILE = 16
+
+BAR_VALUE_SIZE = 15  # the number printed above each bar
+LEGEND_SIZE = 18  # power scenario names in the legend
+AXIS_TITLE_SIZE = 15  # "GHG emissions (Mt CO₂e)"
+AXIS_TICK_SIZE = 14  # the 0, 1, 2 … 6 up the y-axis
+HOVER_SIZE = 13  # text inside the hover tooltip
+
 
 # ---------------------------------------------------------------------------
 # 3. Build the Plotly figure
@@ -135,7 +153,7 @@ def build_figure() -> go.Figure:
                 marker=dict(color=COLORS[scenario]),
                 text=[f"{v:.1f}" for v in values],
                 textposition="outside",
-                textfont=dict(size=15, color=TEXT_SECONDARY),
+                textfont=dict(size=BAR_VALUE_SIZE, color=TEXT_SECONDARY),
                 cliponaxis=False,
                 hovertemplate=(
                     "<b>%{fullData.name}</b><br>"
@@ -157,22 +175,22 @@ def build_figure() -> go.Figure:
             y=1.06,
             xanchor="center",
             x=0.5,
-            font=dict(size=14, color=TEXT_SECONDARY),
+            font=dict(size=LEGEND_SIZE, color=TEXT_SECONDARY),
         ),
         yaxis=dict(
             title=dict(
                 text="GHG emissions (Mt CO₂e)",
-                font=dict(size=15, color=TEXT_SECONDARY),
+                font=dict(size=AXIS_TITLE_SIZE, color=TEXT_SECONDARY),
             ),
             gridcolor=GRIDLINE,
             zerolinecolor=BASELINE,
             zerolinewidth=1,
             rangemode="tozero",
-            tickfont=dict(size=14, color=TEXT_SECONDARY),
+            tickfont=dict(size=AXIS_TICK_SIZE, color=TEXT_SECONDARY),
         ),
         xaxis=dict(
             title=None,
-            tickfont=dict(size=30, color=TEXT_COLOR),
+            tickfont=dict(size=CATEGORY_LABEL_SIZE, color=TEXT_COLOR),
             showgrid=False,
         ),
         plot_bgcolor=BG_COLOR,
@@ -181,7 +199,7 @@ def build_figure() -> go.Figure:
         hoverlabel=dict(
             bgcolor=TEXT_COLOR,
             font_color=BG_COLOR,
-            font_size=13,
+            font_size=HOVER_SIZE,
             font_family=FONT_STACK,
         ),
         height=540,
@@ -414,7 +432,9 @@ PAGE_TEMPLATE = """<!doctype html>
       const narrow = window.innerWidth < 520;
       if (narrow === lastNarrow) return;
       lastNarrow = narrow;
-      Plotly.relayout(chartEl, {{ 'xaxis.tickfont.size': narrow ? 16 : 30 }});
+      Plotly.relayout(chartEl, {{
+        'xaxis.tickfont.size': narrow ? {category_label_size_mobile} : {category_label_size}
+      }});
     }}
     applyResponsiveTickSize();
     window.addEventListener('resize', applyResponsiveTickSize);
@@ -455,6 +475,8 @@ def main() -> None:
         gridline=GRIDLINE,
         baseline=BASELINE,
         border_hairline=BORDER_HAIRLINE,
+        category_label_size=CATEGORY_LABEL_SIZE,
+        category_label_size_mobile=CATEGORY_LABEL_SIZE_MOBILE,
         fig_json=json.dumps(fig.to_plotly_json()),
     )
 
