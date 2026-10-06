@@ -66,8 +66,8 @@ PAGE_TITLE = "Emissions of a 1GW data centre"
 
 # The big on-page headline (can be a full sentence; wraps to multiple lines).
 HEADLINE = (
-    "In its first year of operations, a 1GW fossil fueled data center could "
-    "consume from 2.7 to 5.7 Mt CO₂e"
+    "In its first year of operations, a 1GW fossil fueled data centre could "
+    "emit from 2.7 to 5.7 Mt CO₂e"
 )
 SUBTITLE = (
     "Illustrative emissions of a theoretical 1GW data centre in the UK under "
@@ -173,7 +173,7 @@ def build_figure() -> go.Figure:
             orientation="h",
             yanchor="bottom",
             y=1.06,
-            xanchor="center",
+            xanchor="centre",
             x=0.5,
             font=dict(size=LEGEND_SIZE, color=TEXT_SECONDARY),
         ),
@@ -302,7 +302,7 @@ PAGE_TEMPLATE = """<!doctype html>
     margin-bottom: 4px;
   }}
   .viz-header h1 {{ text-align: left; }}
-  .logo {{ display: inline-flex; align-items: center; flex-shrink: 0; margin-top: 2px; }}
+  .logo {{ display: inline-flex; align-items: centre; flex-shrink: 0; margin-top: 2px; }}
   .logo--svg svg {{ height: 26px; width: auto; display: block; }}
   .logo--raster img {{ height: 26px; width: auto; display: block; }}
   .logo--text {{
