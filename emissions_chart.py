@@ -66,7 +66,7 @@ PAGE_TITLE = "Emissions of a 1GW data centre"
 
 # The big on-page headline (can be a full sentence; wraps to multiple lines).
 HEADLINE = (
-    "In its first year of operations, a 1 GW fossil-fueled "
+    "In its first year of operations, a 1 GW fossil-fueled \n"
     "data centre could emit from 2.7 to 5.7 Mt CO₂e"
 )
 SUBTITLE = (
